@@ -58,17 +58,10 @@ class NeuralNetwork:
 
     def feedForward(self):
         self.hidden = self.weights[0].dot(self._input)#h
-        print()
         self.hidden = np.add(self.hidden, self.biases[0])#neth
         self.activation(self.hidden)#outh
-        #print("ffwd 1")
-        #print(np.shape(self.output))
         self.output = self.weights[1].dot(self.hidden)#o
-        #print("ffwd 2")
-        #print(np.shape(self.weights[1]))
-        self.output = np.add(self.output,self.biases[1])#neto
-        #print("ffwd 3")
-        #print(np.shape(self.output))
+        self.output = np.add(self.output,self.biases[1])#neto     
         self.activation(self.output)#outo 
 
     def backProp(self):
@@ -120,7 +113,7 @@ targets[0][0][0]=0
 targets[1][0][0]=1
 targets[2][0][0]=1
 targets[3][0][0]=0
-#nn.test()
+
 i=0
 while True:
     for j in range(len(inputs)):
