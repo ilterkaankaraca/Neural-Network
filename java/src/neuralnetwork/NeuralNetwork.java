@@ -5,8 +5,6 @@
  */
 package neuralnetwork;
 
-import sun.awt.www.content.audio.wav;
-
 /**
  *
  * @author Ilterkaan Karaca
@@ -37,10 +35,6 @@ public class NeuralNetwork {
         weights[1].randomize();
         biases[0].randomize();
         biases[1].randomize();
-        weights[0]=Matrix.scalarMult(weights[0], 0);
-        weights[1]=Matrix.scalarMult(weights[1], 0);
-        biases[0]=Matrix.scalarMult(biases[0], 0);
-        biases[1]=Matrix.scalarMult(biases[1], 0);
     }
     public static void activation(Matrix temp){
         for(int i=0;i<temp.matrix.length;i++){
@@ -59,14 +53,6 @@ public class NeuralNetwork {
             err+=temp.matrix[i][0];
         }
         return err;
-    }
-    public static void pWeigth(Matrix temp){
-         for(int i=0;i<temp.matrix.length;i++){
-            for(int j=0;j<temp.matrix[0].length;j++)
-                System.out.print(temp.matrix[i][j]+ " ");
-            System.out.println();
-        }
-        
     }
     public static Matrix dError(Matrix output, Matrix target){
         Matrix temp = Matrix.sub(output, target);
@@ -96,32 +82,25 @@ public class NeuralNetwork {
         pWeigth((this.output));
     }
     public void backProp(){
-System.out.println("bp weight 1");  
-        pWeigth(this.weights[1]);
-//output layer
+        //output layer
         Matrix out_d_error_L2 = dError(output, target);
         Matrix net_d_out_L2 = dActivation(output);
         Matrix net_d_error_L2 = Matrix.eWMult(out_d_error_L2, net_d_out_L2);
-        Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(hidden));
-        Matrix out_d_error_L1=Matrix.mult(Matrix.transpose(weights[1]),net_d_error_L2);
+        Matrix w_d_error_L2 = Matrix.multiple(net_d_error_L2, Matrix.transpose(hidden));
+        Matrix out_d_error_L1=Matrix.multiple(Matrix.transpose(weights[1]),net_d_error_L2);
         weights[1]=Matrix.sub(weights[1],Matrix.scalarMult(w_d_error_L2, learningRate));
-        System.out.println("bp weight 2");
-        pWeigth(this.weights[1]);
+
+
         //hidden layer
         Matrix net_d_out_L1 = dActivation(hidden);
         Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
         Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
         weights[0]=Matrix.sub(weights[0],Matrix.scalarMult(w_d_error_L1, learningRate));
-        System.out.println("w_d_error_L1");
-        pWeigth(w_d_error_L1);
     }
     public void Test(){
         Matrix temp = Matrix.transpose(this.weights[1]);
         System.out.println(this.weights[1].matrix[1].length);
     }
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         int epoc=1;
 
@@ -152,14 +131,11 @@ System.out.println("bp weight 1");
         targets[1].matrix[0][0]=1;
         targets[2].matrix[0][0]=1;
         targets[3].matrix[0][0]=0;
-        System.out.println("giriş");
-        pWeigth(nn.weights[0]);
         for(int i=0;i<epoc;i++){
             for(int j=0;j<inputs.length;j++){
                 nn.input=inputs[j];
                 nn.target=targets[j];
                 nn.feedForward();
-                //System.out.println(j+" "+nn.output);
                 nn.backProp();
             }
         }

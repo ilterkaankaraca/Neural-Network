@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package neuralnetwork;
 
 import java.util.Random;
@@ -11,38 +6,29 @@ import java.util.Random;
  *
  * @author İlterkaan Karaca
  */
-public class Matrix {
-    int row;
-    int column;
-    float[][] matrix;
-    
-    public Matrix(int row,int column){
-        this.row = row;
-        this.column = column;
-        matrix = new float[row][column];
-    }
-    public static Matrix mult(Matrix M1, Matrix M2){
-    // Matris çarpımının tutulacağı matris.
-    Matrix temp = new Matrix(M1.row, M2.column);
-    if(M1.column==M2.row){
-        for(int i = 0; i < M1.matrix.length; i++)
-        {
-            for(int j = 0; j < M2.matrix[0].length; j++)
+public class Matrix 
+{
+    public static Matrix multiple(Matrix M1, Matrix M2)
+    {
+            Matrix temp = new Matrix(M1.row, M2.column);
+            if(M1.column==M2.row){
+            for(int i = 0; i < M1.matrix.length; i++)
             {
-                for(int k = 0; k < M2.matrix.length; k++)
+                for(int j = 0; j < M2.matrix[0].length; j++)
                 {
-                    // M1'in i. satırı ve M2'nin j. sütununun
-                    // çarpımından elde edilen toplam.
-                    temp.matrix[i][j] += M1.matrix[i][k] * M2.matrix[k][j];
+                    for(int k = 0; k < M2.matrix.length; k++)
+                    {
+                        temp.matrix[i][j] += M1.matrix[i][k] * M2.matrix[k][j];
+                    }
                 }
             }
         }
+        else
+        {
+            System.out.println("M1.row and M2.column must be equal.");
+        }
+        return temp;
     }
-    else{
-        System.out.println("M1.row and M2.column must be equal.");
-    }
-    return temp;
-}
     public static Matrix add(Matrix M1,Matrix M2){
         Matrix temp = new Matrix(M1.row,M1.column);
         if(M1.row == M2.row && M1.column == M2.column){
@@ -53,11 +39,12 @@ public class Matrix {
             }
         }
         else{
-            System.out.println("add error");
+            System.out.println("adding error");
         }
         return temp;
     }
-    public static Matrix sub(Matrix M1, Matrix M2){
+    
+    public static Matrix subtract(Matrix M1, Matrix M2){
         Matrix temp = new Matrix(M1.row,M1.column);
         if(M1.row == M2.row && M1.column == M2.column){
             for(int i=0;i<M1.row;i++){
@@ -67,7 +54,7 @@ public class Matrix {
             }
         }
         else{
-            System.out.println("sub error");
+            System.out.println("subtraction error");
         }
         return temp;
     }
