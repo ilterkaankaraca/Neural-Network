@@ -67,7 +67,6 @@ public class NeuralNetwork {
         return temp;
     }
     public void feedForward(){
-        System.out.println("fwd hidden");
         
         hidden = Matrix.mult(weights[0], input);//h
         
@@ -79,7 +78,6 @@ public class NeuralNetwork {
         
         output = Matrix.add(output, biases[1]);//neto
         activation(output);//outo  
-        pWeigth((this.output));
     }
     public void backProp(){
         //output layer
@@ -90,34 +88,28 @@ public class NeuralNetwork {
         Matrix out_d_error_L1=Matrix.multiple(Matrix.transpose(weights[1]),net_d_error_L2);
         weights[1]=Matrix.sub(weights[1],Matrix.scalarMult(w_d_error_L2, learningRate));
 
-
         //hidden layer
         Matrix net_d_out_L1 = dActivation(hidden);
         Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
         Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
         weights[0]=Matrix.sub(weights[0],Matrix.scalarMult(w_d_error_L1, learningRate));
     }
-    public void Test(){
-        Matrix temp = Matrix.transpose(this.weights[1]);
-        System.out.println(this.weights[1].matrix[1].length);
-    }
     public static void main(String[] args) {
-        int epoc=1;
-
+        int epoc=1000;
         NeuralNetwork nn = new NeuralNetwork(2,2,1,0.5f);
         Matrix[] inputs = new Matrix[4];
         Matrix[] targets = new Matrix[4];
-        
+
         inputs[0] = new Matrix(nn.inputN,1);
         inputs[1] = new Matrix(nn.inputN,1);
         inputs[2] = new Matrix(nn.inputN,1);
         inputs[3] = new Matrix(nn.inputN,1);
-        
+
         targets[0] = new Matrix(nn.outputN,1);
         targets[1] = new Matrix(nn.outputN,1);
         targets[2] = new Matrix(nn.outputN,1);
         targets[3] = new Matrix(nn.outputN,1);
-        
+
         inputs[0].matrix[0][0]=0;
         inputs[0].matrix[1][0]=0;
         inputs[1].matrix[0][0]=0;
@@ -139,9 +131,6 @@ public class NeuralNetwork {
                 nn.backProp();
             }
         }
-        
-        System.out.println("çıkış");
-        pWeigth(nn.weights[0]);
     }
     
 }
