@@ -6,7 +6,7 @@ namespace NeuralNetwork
 	{
 		int row;
 		int column;
-		double[,] matrix;
+		float[,] matrix;
 
 		static Random randomize = new Random();
 
@@ -14,7 +14,7 @@ namespace NeuralNetwork
 		{
 			this.row = row;
 			this.column = column;
-			matrix = new double[row][column];
+			matrix = new float[row][column];
 		}
 
 		// Copy Constructor
@@ -23,7 +23,7 @@ namespace NeuralNetwork
 			this.rows = m.rows;
 			this.cols = m.cols;
 
-			this.data = new double[rows, cols];
+			this.data = new float[rows, cols];
 
 			for(int i = 0; i < rows; i++)
 				for(int j = 0; j < cols; j++)
@@ -111,7 +111,7 @@ namespace NeuralNetwork
 			}
 			return temp;
         }
-        public static Matrix scalarMult(Matrix M1, double number)
+        public static Matrix scalarMult(Matrix M1, float number)
         {
             Matrix temp = new Matrix(M1.row, M1.column);
             for (int i = 0; i < M1.row; i++)
@@ -154,7 +154,7 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < column; j++)
                 {
-                    matrix[i][j] = rand.nextdouble();
+                    matrix[i][j] = rand.nextfloat();
                 }
             }
         }
@@ -232,7 +232,7 @@ namespace NeuralNetwork
                 Console.WriteLine("eWMult error");
             }
         }
-        public void scalarMult(double number)
+        public void scalarMult(float number)
         {
             for (int i = 0; i < this.row; i++)
             {

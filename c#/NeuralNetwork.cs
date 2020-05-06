@@ -1,144 +1,170 @@
 ﻿using System;
 
-namespace NeuralNetwork
-{
-	public class NeuralNetwork
-	{
-		int inputN, hiddenN, outputN;
-		float learningRate;
-		Matrix input;
-		Matrix output;
-		Matrix target;
-		Matrix hidden;
-		Matrix[] weights = new Matrix[2];
-		Matrix[] biases = new Matrix[2];
-
-		public NeuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, double learningRate)
-		{
-			this.inputNodes  = inputNodes;
-			this.hiddenNodes = hiddenNodes;
-			this.outputNodes = outputNodes;
-
-			this.learningRate = learningRate;
-		
-			weights_ih = new Matrix(hiddenNodes, inputNodes);
-			weights_ho = new Matrix(outputNodes, hiddenNodes);
-			weights_ih.Randomize();
-			weights_ho.Randomize();
-
-			bias_h = new Matrix(this.hiddenNodes, 1);
-			bias_o = new Matrix(this.outputNodes, 1);
-			bias_h.Randomize();
-			bias_o.Randomize();
-		}
-
-		public NeuralNetwork(NeuralNetwork nn)
-		{
-			this.inputNodes = nn.inputNodes;
-			this.hiddenNodes = nn.hiddenNodes;
-			this.outputNodes = nn.outputNodes;
-
-			this.learningRate = nn.learningRate;
-
-			this.weights_ih = new Matrix(nn.weights_ih);
-			this.weights_ho = new Matrix(nn.weights_ho);
-			this.bias_h = new Matrix(nn.bias_h);
-			this.bias_o = new Matrix(nn.bias_o);
-		}
-
-		public double[] FeedForward(double[] inputArray)
-		{
-			// Generating the hidden outputs.
-			Matrix input = Matrix.FromArray(inputArray);
-			Matrix hidden = Matrix.MatrixProduct(this.weights_ih, input);
-			hidden += this.bias_h;
-			hidden.Map(Tanh);
-
-			// Generating the output's output.
-			Matrix output = Matrix.MatrixProduct(this.weights_ho, hidden);
-			output += this.bias_o;
-			output.Map(Tanh);
-
-			return Matrix.ToArray(output);
-		}
-
-		public void Train(double[] inputArray, double[] targetArray)
-		{
-			// FeedForward Process
-			// Generating the hidden outputs.
-			Matrix input = Matrix.FromArray(inputArray);
-			Matrix out_hid = Matrix.MatrixProduct(this.weights_ih, input);
-			out_hid += this.bias_h;
-			out_hid.Map(Tanh);
-
-			// Generating the output's output.
-			Matrix outs_out = Matrix.MatrixProduct(this.weights_ho, out_hid);
-			outs_out += this.bias_o;
-			outs_out.Map(Tanh);
-
-			Matrix target = Matrix.FromArray(targetArray);
+namespace neuralnetwork {
 
 
-			// Backpropagation Process
-			Matrix neto_d_E = (outs_out - target) * Matrix.Map(outs_out, DerSigmoid);//error calc
 
-			Matrix wo_d_neto = Matrix.Map(out_hid, DerNetFunc);
+    /**
+     *
+     * @author Ilterkaan Karaca
+     */
+    public class NeuralNetwork
+    {
+        int inputN, hiddenN, outputN;
+        float learningRate;
+        Matrix input;
+        Matrix output;
+        Matrix target;
+        Matrix hidden;
+        Matrix[] weights = new Matrix[2];
+        Matrix[] biases = new Matrix[2];
+        public NeuralNetwork(int inputN, int hiddenN, int outputN, float learningRate)
+        {
+            this.inputN = inputN;
+            this.hiddenN = hiddenN;
+            this.outputN = outputN;
+            this.learningRate = learningRate;
 
-			Matrix wo_d_E = Matrix.MatrixProduct(neto_d_E, Matrix.Transpose(wo_d_neto));
+            input = new Matrix(inputN, 1);
+            hidden = new Matrix(hiddenN, 1);
+            output = new Matrix(outputN, 1);
 
-			Matrix outh_d_neto = Matrix.Map(weights_ho, DerNetFunc);
+            weights[0] = new Matrix(hiddenN, inputN);
+            weights[1] = new Matrix(outputN, hiddenN);
+            biases[0] = new Matrix(hiddenN, 1);
+            biases[1] = new Matrix(outputN, 1);
 
-			weights_ho = weights_ho - (learningRate * wo_d_E);
 
-			//Console.WriteLine(weights_ho);
+            weights[0].randomize();
+            weights[1].randomize();
+            biases[0].randomize();
+            biases[1].randomize();
 
-			Matrix outh_d_E = Matrix.MatrixProduct(Matrix.Transpose(outh_d_neto), neto_d_E);
+        }
+        public static void activation(Matrix temp)
+        {
+            for (int i = 0; i < temp.matrix.length; i++)
+            {
+                for (int j = 0; j < temp.matrix[0].length; j++)
+                    temp.matrix[i][j] = (1f / (1f + (float)Math.exp(-temp.matrix[i][j])));
+            }
+        }
+        public static float error(Matrix output, Matrix target)
+        {
+            float err = 0.0f;
+            Matrix temp = new Matrix(output.row, output.column);
+            for (int i = 0; i < temp.matrix.length; i++)
+            {
+                for (int j = 0; j < temp.matrix[0].length; j++)
+                    temp.matrix[i][j] = 0.5f * (float)(Math.pow((double)(target.matrix[i][j] - output.matrix[i][j]), 2.0));
+            }
+            for (int i = 0; i < temp.matrix.length; i++)
+            {
+                err += temp.matrix[i][0];
+            }
+            return err;
+        }
 
-			Matrix neth_d_outh = Matrix.Map(out_hid, DerSigmoid);
+        public static Matrix dError(Matrix output, Matrix target)
+        {
+            Matrix temp = Matrix.sub(output, target);
+            return temp;
+        }
+        public static Matrix dActivation(Matrix output)
+        {
+            Matrix temp = new Matrix(output.row, output.column);
+            for (int i = 0; i < temp.matrix.length; i++)
+            {
+                for (int j = 0; j < temp.matrix[0].length; j++)
+                    temp.matrix[i][j] = output.matrix[i][j] * (1f - output.matrix[i][j]);
+            }
+            return temp;
+        }
+        public void feedForward()
+        {
 
-			Matrix neth_d_E = outh_d_E * neth_d_outh;
 
-			Matrix wh_d_neth = Matrix.Map(input, DerNetFunc);
+            hidden = Matrix.mult(weights[0], input);//h
 
-			Matrix wh_d_E = Matrix.MatrixProduct(wh_d_neth, Matrix.Transpose(neth_d_E));
+            hidden = Matrix.add(hidden, biases[0]);//neth
 
-			weights_ih = weights_ih - (learningRate * Matrix.Transpose(wh_d_E));
-		}
+            activation(hidden);//outh
 
-		public double GetError(Matrix target, Matrix output)
-		{
-			// Calculate the error 
-			// ERROR = (1 / 2) * (TARGETS - OUTPUTS)^2
+            output = Matrix.mult(weights[1], hidden);//o
 
-			Matrix outputError = target - output;
-			outputError = (outputError * outputError) / 2.0;
+            output = Matrix.add(output, biases[1]);//neto
+            activation(output);//outo  
 
-			double error = 0.0;
-			for(int i = 0; i < outputError.data.GetLength(0); i++)
-				error += outputError.data[i, 0];
+        }
+        public void backProp()
+        {
+            //output layer
+            Matrix out_d_error_L2 = dError(output, target);
+            Matrix net_d_out_L2 = dActivation(output);
+            Matrix net_d_error_L2 = Matrix.eWMult(out_d_error_L2, net_d_out_L2);
+            Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(hidden));
+            Matrix out_d_error_L1 = Matrix.mult(Matrix.transpose(weights[1]), net_d_error_L2);
+            weights[1] = Matrix.sub(weights[1], Matrix.scalarMult(w_d_error_L2, learningRate));
 
-			return error;
-		}
+            //hidden layer
+            Matrix net_d_out_L1 = dActivation(hidden);
+            Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
+            Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
+            weights[0] = Matrix.sub(weights[0], Matrix.scalarMult(w_d_error_L1, learningRate));
+        }
+        public void Test()
+        {
+            Matrix temp = Matrix.transpose(this.weights[1]);
+            Console.WriteLine(this.weights[1].matrix[1].length);
+        }
+        /**
+         * @param args the command line arguments
+         */
+        public static void main(String[] args)
+        {
+            int epoc = 1;
 
-		public static double Sigmoid(double x)
-		{
-			return 1.0 / (1.0 + Math.Exp(-x));
-		}
+            NeuralNetwork nn = new NeuralNetwork(2, 2, 1, 0.5f);
+            Matrix[] inputs = new Matrix[4];
+            Matrix[] targets = new Matrix[4];
 
-		public static double Tanh(double x)
-		{
-			return 2f / (1f + Math.Exp(-2f * x)) - 1f;
-		}
+            inputs[0] = new Matrix(nn.inputN, 1);
+            inputs[1] = new Matrix(nn.inputN, 1);
+            inputs[2] = new Matrix(nn.inputN, 1);
+            inputs[3] = new Matrix(nn.inputN, 1);
 
-		public static double DerSigmoid(double x)
-		{
-			return x * (1.0 - x);
-		}
+            targets[0] = new Matrix(nn.outputN, 1);
+            targets[1] = new Matrix(nn.outputN, 1);
+            targets[2] = new Matrix(nn.outputN, 1);
+            targets[3] = new Matrix(nn.outputN, 1);
 
-		public static double DerNetFunc(double x)
-		{
-			return x;
-		}
-	}
+            inputs[0].matrix[0][0] = 0;
+            inputs[0].matrix[1][0] = 0;
+            inputs[1].matrix[0][0] = 0;
+            inputs[1].matrix[1][0] = 1;
+            inputs[2].matrix[1][0] = 1;
+            inputs[2].matrix[0][0] = 0;
+            inputs[3].matrix[0][0] = 1;
+            inputs[3].matrix[1][0] = 1;
+
+            targets[0].matrix[0][0] = 0;
+            targets[1].matrix[0][0] = 1;
+            targets[2].matrix[0][0] = 1;
+            targets[3].matrix[0][0] = 0;
+
+            for (int i = 0; i < epoc; i++)
+            {
+                for (int j = 0; j < inputs.length; j++)
+                {
+                    nn.input = inputs[j];
+                    nn.target = targets[j];
+                    nn.feedForward();
+                    nn.backProp();
+                }
+            }
+
+
+        }
+
+    }
 }
-
