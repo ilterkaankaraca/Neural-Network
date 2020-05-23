@@ -1,6 +1,7 @@
 ﻿using System;
 
-namespace neuralnetwork {
+namespace NeuralNetwork
+{
 
 
 
@@ -10,11 +11,11 @@ namespace neuralnetwork {
      */
     public class NeuralNetwork
     {
-        int inputN, hiddenN, outputN;
+        public int inputN, hiddenN, outputN;
         float learningRate;
-        Matrix input;
-        Matrix output;
-        Matrix target;
+        public Matrix input;
+        public Matrix output;
+        public Matrix target;
         Matrix hidden;
         Matrix[] weights = new Matrix[2];
         Matrix[] biases = new Matrix[2];
@@ -35,48 +36,48 @@ namespace neuralnetwork {
             biases[1] = new Matrix(outputN, 1);
 
 
-            weights[0].randomize();
-            weights[1].randomize();
-            biases[0].randomize();
-            biases[1].randomize();
+            weights[0].Randomize();
+            weights[1].Randomize();
+            biases[0].Randomize();
+            biases[1].Randomize();
 
         }
         public static void activation(Matrix temp)
         {
-            for (int i = 0; i < temp.matrix.length; i++)
+            for (int i = 0; i < temp.row; i++)
             {
-                for (int j = 0; j < temp.matrix[0].length; j++)
-                    temp.matrix[i][j] = (1f / (1f + (float)Math.exp(-temp.matrix[i][j])));
+                for (int j = 0; j < temp.column; j++)
+                    temp.matrix[i,j] = (1f / (1f + (float)Math.Exp(-temp.matrix[i,j])));
             }
         }
         public static float error(Matrix output, Matrix target)
         {
             float err = 0.0f;
             Matrix temp = new Matrix(output.row, output.column);
-            for (int i = 0; i < temp.matrix.length; i++)
+            for (int i = 0; i < temp.row; i++)
             {
-                for (int j = 0; j < temp.matrix[0].length; j++)
-                    temp.matrix[i][j] = 0.5f * (float)(Math.pow((double)(target.matrix[i][j] - output.matrix[i][j]), 2.0));
+                for (int j = 0; j < temp.column; j++)
+                    temp.matrix[i,j] = 0.5f * (float)(Math.Pow((double)(target.matrix[i,j] - output.matrix[i,j]), 2.0));
             }
-            for (int i = 0; i < temp.matrix.length; i++)
+            for (int i = 0; i < temp.row; i++)
             {
-                err += temp.matrix[i][0];
+                err += temp.matrix[i,0];
             }
             return err;
         }
 
         public static Matrix dError(Matrix output, Matrix target)
         {
-            Matrix temp = Matrix.sub(output, target);
+            Matrix temp = Matrix.subtract(output, target);
             return temp;
         }
         public static Matrix dActivation(Matrix output)
         {
             Matrix temp = new Matrix(output.row, output.column);
-            for (int i = 0; i < temp.matrix.length; i++)
+            for (int i = 0; i < temp.row; i++)
             {
-                for (int j = 0; j < temp.matrix[0].length; j++)
-                    temp.matrix[i][j] = output.matrix[i][j] * (1f - output.matrix[i][j]);
+                for (int j = 0; j < temp.column; j++)
+                    temp.matrix[i,j] = output.matrix[i,j] * (1f - output.matrix[i,j]);
             }
             return temp;
         }
@@ -104,18 +105,13 @@ namespace neuralnetwork {
             Matrix net_d_error_L2 = Matrix.eWMult(out_d_error_L2, net_d_out_L2);
             Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(hidden));
             Matrix out_d_error_L1 = Matrix.mult(Matrix.transpose(weights[1]), net_d_error_L2);
-            weights[1] = Matrix.sub(weights[1], Matrix.scalarMult(w_d_error_L2, learningRate));
+            weights[1] = Matrix.subtract(weights[1], Matrix.scalarMult(w_d_error_L2, learningRate));
 
             //hidden layer
             Matrix net_d_out_L1 = dActivation(hidden);
             Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
             Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
-            weights[0] = Matrix.sub(weights[0], Matrix.scalarMult(w_d_error_L1, learningRate));
-        }
-        public void Test()
-        {
-            Matrix temp = Matrix.transpose(this.weights[1]);
-            Console.WriteLine(this.weights[1].matrix[1].length);
+            weights[0] = Matrix.subtract(weights[0], Matrix.scalarMult(w_d_error_L1, learningRate));
         }
         /**
          * @param args the command line arguments
@@ -138,23 +134,23 @@ namespace neuralnetwork {
             targets[2] = new Matrix(nn.outputN, 1);
             targets[3] = new Matrix(nn.outputN, 1);
 
-            inputs[0].matrix[0][0] = 0;
-            inputs[0].matrix[1][0] = 0;
-            inputs[1].matrix[0][0] = 0;
-            inputs[1].matrix[1][0] = 1;
-            inputs[2].matrix[1][0] = 1;
-            inputs[2].matrix[0][0] = 0;
-            inputs[3].matrix[0][0] = 1;
-            inputs[3].matrix[1][0] = 1;
+            inputs[0].matrix[0,0] = 0;
+            inputs[0].matrix[1,0] = 0;
+            inputs[1].matrix[0,0] = 0;
+            inputs[1].matrix[1,0] = 1;
+            inputs[2].matrix[1,0] = 1;
+            inputs[2].matrix[0,0] = 0;
+            inputs[3].matrix[0,0] = 1;
+            inputs[3].matrix[1,0] = 1;
 
-            targets[0].matrix[0][0] = 0;
-            targets[1].matrix[0][0] = 1;
-            targets[2].matrix[0][0] = 1;
-            targets[3].matrix[0][0] = 0;
+            targets[0].matrix[0,0] = 0;
+            targets[1].matrix[0,0] = 1;
+            targets[2].matrix[0,0] = 1;
+            targets[3].matrix[0,0] = 0;
 
             for (int i = 0; i < epoc; i++)
             {
-                for (int j = 0; j < inputs.length; j++)
+                for (int j = 0; j < inputs.Length; j++)
                 {
                     nn.input = inputs[j];
                     nn.target = targets[j];

@@ -4,9 +4,9 @@ namespace NeuralNetwork
 {
 	public class Matrix
 	{
-		int row;
-		int column;
-		float[,] matrix;
+        public int row;
+        public int column;
+		public float[,] matrix;
 
 		static Random randomize = new Random();
 
@@ -14,33 +14,33 @@ namespace NeuralNetwork
 		{
 			this.row = row;
 			this.column = column;
-			matrix = new float[row][column];
+			matrix = new float[row,column];
 		}
 
 		// Copy Constructor
 		public Matrix(Matrix m)
 		{
-			this.rows = m.rows;
-			this.cols = m.cols;
+			this.row = m.row;
+			this.column = m.column;
 
-			this.data = new float[rows, cols];
+			this.matrix = new float[row, column];
 
-			for(int i = 0; i < rows; i++)
-				for(int j = 0; j < cols; j++)
-					this.data[i, j] = m.data[i, j];
+			for(int i = 0; i < row; i++)
+				for(int j = 0; j < column; j++)
+					this.matrix[i, j] = m.matrix[i, j];
 		}
 		public static Matrix multiple(Matrix M1, Matrix M2)
 		{
 			Matrix temp = new Matrix(M1.row, M2.column);
 			if (M1.column == M2.row)
 			{
-				for (int i = 0; i < M1.matrix.length; i++)
+				for (int i = 0; i < M1.matrix.Length; i++)
 				{
-					for (int j = 0; j < M2.matrix[0].length; j++)
+					for (int j = 0; j < M2.row; j++)
 					{
-						for (int k = 0; k < M2.matrix.length; k++)
+						for (int k = 0; k < M2.column; k++)
 						{
-							temp.matrix[i][j] += M1.matrix[i][k] * M2.matrix[k][j];
+							temp.matrix[i,j] += M1.matrix[i,k] * M2.matrix[k,j];
 						}
 					}
 				}
@@ -62,7 +62,7 @@ namespace NeuralNetwork
 				{
 					for (int j = 0; j < M2.column; j++)
 					{
-						temp.matrix[i][j] = M1.matrix[i][j] + M2.matrix[i][j];
+						temp.matrix[i,j] = M1.matrix[i,j] + M2.matrix[i,j];
 					}
 				}
 			}
@@ -82,7 +82,7 @@ namespace NeuralNetwork
 				{
 					for (int j = 0; j < M2.column; j++)
 					{
-						temp.matrix[i][j] = M1.matrix[i][j] - M2.matrix[i][j];
+						temp.matrix[i,j] = M1.matrix[i,j] - M2.matrix[i,j];
 					}
 				}
 			}
@@ -101,7 +101,7 @@ namespace NeuralNetwork
 				{
 					for (int j = 0; j < M2.column; j++)
 					{
-						temp.matrix[i][j] = M1.matrix[i][j] * M2.matrix[i][j];
+						temp.matrix[i,j] = M1.matrix[i,j] * M2.matrix[i,j];
 					}
 				}
 			}
@@ -118,7 +118,7 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < M1.column; j++)
                 {
-                    temp.matrix[i][j] = M1.matrix[i][j] * number;
+                    temp.matrix[i,j] = M1.matrix[i,j] * number;
                 }
             }
             return temp;
@@ -130,7 +130,7 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < M1.column; j++)
                 {
-                    temp.matrix[i][j] = M1.matrix[i][j] * M1.matrix[i][j];
+                    temp.matrix[i,j] = M1.matrix[i,j] * M1.matrix[i,j];
                 }
             }
             return temp;
@@ -142,44 +142,42 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < M1.column; j++)
                 {
-                    temp.matrix[j][i] = M1.matrix[i][j];
+                    temp.matrix[j,i] = M1.matrix[i,j];
                 }
             }
             return temp;
         }
-        public void randomize()
+        public void Randomize()
         {
-            Random rand = new Random();
             for (int i = 0; i < row; i++)
             {
                 for (int j = 0; j < column; j++)
                 {
-                    matrix[i][j] = rand.nextfloat();
+                    this.matrix[i, j] = (float) (randomize.NextDouble() * 2.0 - 1.0);
                 }
             }
         }
-        public void mult(Matrix M2)
+        public static Matrix mult(Matrix m1, Matrix m2)
         {
-            // Matris çarpımının tutulacağı matris.
-            if (this.column == M2.row)
+            if (m1.column != m2.row)
             {
-                for (int i = 0; i < this.matrix.length; i++)
+                Console.WriteLine("Error: Cannot get product of these two matrixes, sizes does not match!");
+                return null;
+            }
+
+            Matrix product = new Matrix(m1.row, m2.column);
+            for (int i = 0; i < m1.row; i++)
+            {
+                for (int j = 0; j < m2.column; j++)
                 {
-                    for (int j = 0; j < M2.matrix[0].length; j++)
+                    for (int k = 0; k < m1.column; k++)
                     {
-                        for (int k = 0; k < M2.matrix.length; k++)
-                        {
-                            // M1'in i. satırı ve M2'nin j. sütununun
-                            // çarpımından elde edilen toplam.
-                            this.matrix[i][j] += this.matrix[i][k] * M2.matrix[k][j];
-                        }
+                        product.matrix[i, j] += m1.matrix[i, k] * m2.matrix[k, j];
                     }
                 }
             }
-            else
-            {
-                Console.WriteLine("M1.row and M2.column must be equal.");
-            }
+
+            return product;
         }
         public void add(Matrix M2)
         {
@@ -189,7 +187,7 @@ namespace NeuralNetwork
                 {
                     for (int j = 0; j < M2.column; j++)
                     {
-                        this.matrix[i][j] = this.matrix[i][j] + M2.matrix[i][j];
+                        this.matrix[i,j] = this.matrix[i,j] + M2.matrix[i,j];
                     }
                 }
             }
@@ -206,7 +204,7 @@ namespace NeuralNetwork
                 {
                     for (int j = 0; j < M2.column; j++)
                     {
-                        this.matrix[i][j] = this.matrix[i][j] - M2.matrix[i][j];
+                        this.matrix[i,j] = this.matrix[i,j] - M2.matrix[i,j];
                     }
                 }
             }
@@ -223,7 +221,7 @@ namespace NeuralNetwork
                 {
                     for (int j = 0; j < M2.column; j++)
                     {
-                        this.matrix[i][j] = this.matrix[i][j] * M2.matrix[i][j];
+                        this.matrix[i,j] = this.matrix[i,j] * M2.matrix[i,j];
                     }
                 }
             }
@@ -238,7 +236,7 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < this.column; j++)
                 {
-                    this.matrix[i][j] = this.matrix[i][j] * number;
+                    this.matrix[i,j] = this.matrix[i,j] * number;
                 }
             }
         }
@@ -248,7 +246,7 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < this.column; j++)
                 {
-                    this.matrix[i][j] = this.matrix[i][j] * this.matrix[i][j];
+                    this.matrix[i,j] = this.matrix[i,j] * this.matrix[i,j];
                 }
             }
         }
@@ -258,7 +256,7 @@ namespace NeuralNetwork
             {
                 for (int j = 0; j < this.column; j++)
                 {
-                    this.matrix[j][i] = this.matrix[i][j];
+                    this.matrix[j,i] = this.matrix[i,j];
                 }
             }
         }
@@ -266,13 +264,13 @@ namespace NeuralNetwork
         public override string ToString()
         {
             string ret = "";
-            ret += string.Format("rows: {0}, cols: {1}\n", rows, cols);
+            ret += string.Format("row: {0}, column: {1}\n", row, column);
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < row; i++)
             {
-                for (int j = 0; j < cols; j++)
+                for (int j = 0; j < column; j++)
                 {
-                    ret += data[i, j] + "\t";
+                    ret += matrix[i, j] + "\t";
                 }
                 ret += "\n";
             }
