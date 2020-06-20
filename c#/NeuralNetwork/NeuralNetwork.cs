@@ -14,7 +14,7 @@ namespace NeuralNetwork
             public Matrix target;
             public Matrix hidden;
             public Matrix[] weights = new Matrix[2];
-            public Matrix[] biases = new Matrix[2];
+        public Matrix[] biases = new Matrix[2];
             public NeuralNetwork(int inputN, int hiddenN, int outputN, float learningRate)
             {
                 this.inputN = inputN;
@@ -35,7 +35,6 @@ namespace NeuralNetwork
                 this.weights[1].Randomize();
                 this.biases[0].Randomize();
                 this.biases[1].Randomize();
-
             }
             public NeuralNetwork(NeuralNetwork nn)
             {
@@ -52,12 +51,20 @@ namespace NeuralNetwork
                 this.biases[0] = new Matrix(nn.biases[0]);
                 this.biases[1] = new Matrix(nn.biases[1]);
             }
-            public static void activation(Matrix temp)
+            public static void Sigmoid(Matrix temp)
             {
                 for (int i = 0; i < temp.row; i++)
                 {
                     for (int j = 0; j < temp.column; j++)               
-                        temp.matrix[i, j] = (1f / (1f + (float)Math.Exp(-temp.matrix[i, j])));
+                        temp.matrix[i, j] = 1f / (1f + (float)Math.Exp(-temp.matrix[i, j]));
+                }
+            }
+            public static void Tanh(Matrix temp)
+            {
+                for (int i = 0; i < temp.row; i++)
+                {
+                    for (int j = 0; j < temp.column; j++)               
+                        temp.matrix[i, j] = 2f / (1f + (float)Math.Exp(-2f*temp.matrix[i, j]))-1;
                 }
             }
             public static float error(Matrix output, Matrix target)
@@ -95,10 +102,10 @@ namespace NeuralNetwork
             {
                 hidden = Matrix.mult(weights[0], input);//h
                 hidden = Matrix.add(hidden, biases[0]);//neth
-                activation(hidden);//outh
+                Tanh(hidden);//outh
                 output = Matrix.mult(weights[1], hidden);//o
                 output = Matrix.add(output, biases[1]);//neto
-                activation(output);//outo  
+                Tanh(output);//outo  
             }
             public void backProp()
             {
@@ -116,5 +123,8 @@ namespace NeuralNetwork
                 Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
                 weights[0] = Matrix.subtract(weights[0], Matrix.scalarMult(w_d_error_L1, learningRate));
             }
+            /**
+             * @param args the command line arguments
+             */
         }
     }
