@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace NeuralNetwork
 {
         public class NeuralNetwork
         {
+            List<Layer> layers = new List<Layer>();
+            public Layer inputLayer;
+            public Layer outputLayer;
             public int inputN, hiddenN, outputN;
             public float learningRate;
             public Matrix input;
@@ -14,7 +16,7 @@ namespace NeuralNetwork
             public Matrix target;
             public Matrix hidden;
             public Matrix[] weights = new Matrix[2];
-        public Matrix[] biases = new Matrix[2];
+            public Matrix[] biases = new Matrix[2];
             public NeuralNetwork(int inputN, int hiddenN, int outputN, float learningRate)
             {
                 this.inputN = inputN;
@@ -36,6 +38,7 @@ namespace NeuralNetwork
                 this.biases[0].Randomize();
                 this.biases[1].Randomize();
             }
+            //Copy constructor
             public NeuralNetwork(NeuralNetwork nn)
             {
                 this.inputN = nn.inputN;
@@ -123,8 +126,15 @@ namespace NeuralNetwork
                 Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
                 weights[0] = Matrix.subtract(weights[0], Matrix.scalarMult(w_d_error_L1, learningRate));
             }
-            /**
-             * @param args the command line arguments
-             */
+            public void Add(Layer layer)
+            {
+                layers.Add(layer);
+                if(inputLayer==null)
+                {
+                    inputLayer=layer;
+                }
+                outputLayer=layers[layers.Count - 1];
+            }
         }
+
     }
