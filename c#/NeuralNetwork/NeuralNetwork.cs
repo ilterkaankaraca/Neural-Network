@@ -6,19 +6,29 @@ namespace NeuralNetwork
 {
         public class NeuralNetwork
         {
-            List<Layer> layers = new List<Layer>();
+            //Number of Layers
+            int layerN;
+            public List<Layer> layers = new List<Layer>();
+            public List<Matrix> weights =new List<Matrix>();
+            public List<Matrix> biases = new List<Matrix>();
             public Layer inputLayer;
             public Layer outputLayer;
+            //Eski kısımlar
             public int inputN, hiddenN, outputN;
             public float learningRate;
             public Matrix input;
             public Matrix output;
             public Matrix target;
             public Matrix hidden;
-            public Matrix[] weights = new Matrix[2];
-            public Matrix[] biases = new Matrix[2];
+            public Matrix[] weightsA = new Matrix[2];
+            public Matrix[] biasesA = new Matrix[2];
+            public NeuralNetwork()
+            {
+                layerN=0;
+            }
             public NeuralNetwork(int inputN, int hiddenN, int outputN, float learningRate)
             {
+                layerN = 0;
                 this.inputN = inputN;
                 this.hiddenN = hiddenN;
                 this.outputN = outputN;
@@ -28,15 +38,15 @@ namespace NeuralNetwork
                 this.hidden = new Matrix(hiddenN, 1);
                 this.output = new Matrix(outputN, 1);
 
-                this.weights[0] = new Matrix(hiddenN, inputN); 
-                this.weights[1] = new Matrix(outputN, hiddenN); 
-                this.biases[0] = new Matrix(hiddenN, 1);
-                this.biases[1] = new Matrix(outputN, 1);
+                this.weightsA[0] = new Matrix(hiddenN, inputN); 
+                this.weightsA[1] = new Matrix(outputN, hiddenN); 
+                this.biasesA[0] = new Matrix(hiddenN, 1);
+                this.biasesA[1] = new Matrix(outputN, 1);
 
-                this.weights[0].Randomize();
-                this.weights[1].Randomize();
-                this.biases[0].Randomize();
-                this.biases[1].Randomize();
+                this.weightsA[0].Randomize();
+                this.weightsA[1].Randomize();
+                this.biasesA[0].Randomize();
+                this.biasesA[1].Randomize();
             }
             //Copy constructor
             public NeuralNetwork(NeuralNetwork nn)
@@ -49,26 +59,10 @@ namespace NeuralNetwork
                 this.input  = nn.input; 
                 this.hidden = nn.hidden;
                 this.output = nn.output;
-                this.weights[0] = new Matrix(nn.weights[0]);
-                this.weights[1] = new Matrix(nn.weights[1]);
-                this.biases[0] = new Matrix(nn.biases[0]);
-                this.biases[1] = new Matrix(nn.biases[1]);
-            }
-            public static void Sigmoid(Matrix temp)
-            {
-                for (int i = 0; i < temp.row; i++)
-                {
-                    for (int j = 0; j < temp.column; j++)               
-                        temp.matrix[i, j] = 1f / (1f + (float)Math.Exp(-temp.matrix[i, j]));
-                }
-            }
-            public static void Tanh(Matrix temp)
-            {
-                for (int i = 0; i < temp.row; i++)
-                {
-                    for (int j = 0; j < temp.column; j++)               
-                        temp.matrix[i, j] = 2f / (1f + (float)Math.Exp(-2f*temp.matrix[i, j]))-1;
-                }
+                this.weightsA[0] = new Matrix(nn.weightsA[0]);
+                this.weightsA[1] = new Matrix(nn.weightsA[1]);
+                this.biasesA[0] = new Matrix(nn.biasesA[0]);
+                this.biasesA[1] = new Matrix(nn.biasesA[1]);
             }
             public static float error(Matrix output, Matrix target)
             {
@@ -103,28 +97,28 @@ namespace NeuralNetwork
             }
             public void FeedForward()
             {
-                hidden = Matrix.mult(weights[0], input);//h
-                hidden = Matrix.add(hidden, biases[0]);//neth
-                Tanh(hidden);//outh
-                output = Matrix.mult(weights[1], hidden);//o
-                output = Matrix.add(output, biases[1]);//neto
-                Tanh(output);//outo  
+                hidden = Matrix.mult(weightsA[0], input);//h
+                hidden = Matrix.add(hidden, biasesA[0]);//neth
+                ActivationFunctions.Tanh(hidden);//outh
+                output = Matrix.mult(weightsA[1], hidden);//o
+                output = Matrix.add(output, biasesA[1]);//neto
+                ActivationFunctions.Tanh(output);//outo  
             }
             public void backProp()
             {
                 //output layer
                 Matrix out_d_error_L2 = dError(output, target);
-                Matrix net_d_out_L2 = dActivation(output);
+                Matrix net_d_out_L2 = ActivationFunctions.DerTanh(output);
                 Matrix net_d_error_L2 = Matrix.eWMult(out_d_error_L2, net_d_out_L2);
                 Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(hidden));
-                Matrix out_d_error_L1 = Matrix.mult(Matrix.transpose(weights[1]), net_d_error_L2);
-                weights[1] = Matrix.subtract(weights[1], Matrix.scalarMult(w_d_error_L2, learningRate));
+                Matrix out_d_error_L1 = Matrix.mult(Matrix.transpose(weightsA[1]), net_d_error_L2);
+                weightsA[1] = Matrix.subtract(weightsA[1], Matrix.scalarMult(w_d_error_L2, learningRate));
 
                 //hidden layer
                 Matrix net_d_out_L1 = dActivation(hidden);
                 Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
                 Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
-                weights[0] = Matrix.subtract(weights[0], Matrix.scalarMult(w_d_error_L1, learningRate));
+                weightsA[0] = Matrix.subtract(weightsA[0], Matrix.scalarMult(w_d_error_L1, learningRate));
             }
             public void Add(Layer layer)
             {
@@ -134,6 +128,10 @@ namespace NeuralNetwork
                     inputLayer=layer;
                 }
                 outputLayer=layers[layers.Count - 1];
+            }
+            public void Initialize()
+            {
+
             }
         }
 
