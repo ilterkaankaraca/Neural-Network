@@ -131,7 +131,11 @@ namespace NeuralNetwork
             }
             public void Initialize()
             {
-
+                //beğer girişse inputN ve 1, hiddensa kendisi ve sonraki, çıkışsa outputN ve 1
+                for(int i=0;i<layers.Count;i++)
+                {
+                    layers[i].Initialize();
+                }
             }
         }
 

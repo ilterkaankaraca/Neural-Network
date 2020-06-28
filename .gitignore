@@ -1,3 +1,5 @@
 /build/
 /java/build/
 /neural-network/.vscode/settings.json
+c#/NeuralNetwork/.vscode/launch.json
+c#/NeuralNetwork/.vscode/tasks.json
