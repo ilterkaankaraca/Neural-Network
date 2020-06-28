@@ -4,52 +4,63 @@ namespace NeuralNetwork
         public class ActivationFunctions
         {
 
-            public static void Sigmoid(Matrix input)
+            public static Matrix Sigmoid(Matrix input)
             {
-                for (int i = 0; i < input.row; i++)
+                Matrix output = new Matrix(input);
+                for (int i = 0; i < output.row; i++)
                 {
-                    for (int j = 0; j < input.column; j++)               
-                        input.matrix[i, j] = 1f / (1f + (float)Math.Exp(-input.matrix[i, j]));
+                    for (int j = 0; j < output.column; j++)               
+                        output.matrix[i, j] = 1f / (1f + (float)Math.Exp(-output.matrix[i, j]));
                 }
+                return output;
             }
-            public static void Tanh(Matrix input)
+            public static Matrix Tanh(Matrix input)
             {
-                for (int i = 0; i < input.row; i++)
+                Matrix output = new Matrix(input);
+                for (int i = 0; i < output.row; i++)
                 {
-                    for (int j = 0; j < input.column; j++)               
-                        input.matrix[i, j] = 2f / (1f + (float)Math.Exp(-2f*input.matrix[i, j]))-1;
+                    for (int j = 0; j < output.column; j++)               
+                        output.matrix[i, j] = 2f / (1f + (float)Math.Exp(-2f*output.matrix[i, j]))-1;
                 }
+                return output;
             }
-            private static void sigmoid(Matrix input)
+            public static Matrix sigmoid(Matrix input)
             {
-                for (int i = 0; i < input.row; i++)
+                Matrix output = new Matrix(input);
+                for (int i = 0; i < output.row; i++)
                 {
-                    for (int j = 0; j < input.column; j++)
+                    for (int j = 0; j < output.column; j++)
                     { 
-                        input.matrix[i,j] = 1.0f / (1.0f + (float)Math.Exp(-input.matrix[i,j]));
+                        output.matrix[i,j] = 1.0f / (1.0f + (float)Math.Exp(-output.matrix[i,j]));
                     }
                 }
+                return output;
             }
 
-            private static void DerSigmoid(Matrix input)
+            public static Matrix DerSigmoid(Matrix input)
             {
-                for (int i = 0; i < input.row; i++)
+                Matrix output = new Matrix(input);
+                for (int i = 0; i < output.row; i++)
                 {
-                    for (int j = 0; j < input.column; j++)
+                    for (int j = 0; j < output.column; j++)
                     { 
-                        input.matrix[i,j] =  input.matrix[i,j] * (1.0f - input.matrix[i,j]);
+                        output.matrix[i,j] =  output.matrix[i,j] * (1.0f - output.matrix[i,j]);
                     }
                 }
+                return output;
             }
-            private static void DerTanh(Matrix input)
+            public static Matrix DerTanh(Matrix input)
             {
-                for (int i = 0; i < input.row; i++)
+                Matrix output = new Matrix(input);
+                for (int i = 0; i < output.row; i++)
                 {
-                    for (int j = 0; j < input.column; j++)
+                    for (int j = 0; j < output.column; j++)
                     { 
-                        input.matrix[i,j] = 1.0f - (input.matrix[i,j]  * input.matrix[i,j]);
+                        output.matrix[i,j] = 1.0f - (output.matrix[i,j]  * output.matrix[i,j]);
                     }
                 }
+                return output;
             }
+           
         }
 }

@@ -6,7 +6,6 @@ namespace NeuralNetwork{
     public enum ActivationType
     {
         TANH,
-        SIGMOID,
-        SOFTMAX
+        SIGMOID
     }
 }
