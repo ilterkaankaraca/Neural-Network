@@ -85,16 +85,6 @@ namespace NeuralNetwork
                 Matrix temp = Matrix.subtract(output, target);
                 return temp;
             }
-            public static Matrix dActivation(Matrix output)
-            {
-                Matrix temp = new Matrix(output.row, output.column);
-                for (int i = 0; i < temp.row; i++)
-                {
-                    for (int j = 0; j < temp.column; j++)
-                        temp.data[i, j] = output.data[i, j] * (1f - output.data[i, j]);
-                }
-                return temp;
-            }
             public void FeedForward()
             {
                 hidden = Matrix.mult(weightsA[0], input);//h
@@ -115,7 +105,7 @@ namespace NeuralNetwork
                 weightsA[1] = Matrix.subtract(weightsA[1], Matrix.scalarMult(w_d_error_L2, learningRate));
 
                 //hidden layer
-                Matrix net_d_out_L1 = dActivation(hidden);
+                Matrix net_d_out_L1 = ActivationFunctions.DerTanh(hidden);
                 Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
                 Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
                 weightsA[0] = Matrix.subtract(weightsA[0], Matrix.scalarMult(w_d_error_L1, learningRate));
