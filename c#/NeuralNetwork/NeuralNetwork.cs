@@ -71,11 +71,11 @@ namespace NeuralNetwork
                 for (int i = 0; i < temp.row; i++)
                 {
                     for (int j = 0; j < temp.column; j++)
-                        temp.matrix[i, j] = 0.5f * (float)(Math.Pow((double)(target.matrix[i, j] - output.matrix[i, j]), 2.0));
+                        temp.data[i, j] = 0.5f * (float)(Math.Pow((double)(target.data[i, j] - output.data[i, j]), 2.0));
                 }
                 for (int i = 0; i < temp.row; i++)
                 {
-                    err += temp.matrix[i, 0];
+                    err += temp.data[i, 0];
                 }
                 return err;
             }
@@ -91,7 +91,7 @@ namespace NeuralNetwork
                 for (int i = 0; i < temp.row; i++)
                 {
                     for (int j = 0; j < temp.column; j++)
-                        temp.matrix[i, j] = output.matrix[i, j] * (1f - output.matrix[i, j]);
+                        temp.data[i, j] = output.data[i, j] * (1f - output.data[i, j]);
                 }
                 return temp;
             }
@@ -131,9 +131,11 @@ namespace NeuralNetwork
             }
             public void Initialize()
             {
-                //beğer girişse inputN ve 1, hiddensa kendisi ve sonraki, çıkışsa outputN ve 1
-                for(int i=0;i<layers.Count;i++)
+                //eğer girişse inputN ve 1, hiddensa kendisi ve sonraki, çıkışsa outputN ve 1
+                layers[0].Initialize()
+                for(int i=1;i<layers.Count;i++)
                 {
+                    
                     layers[i].Initialize();
                 }
             }

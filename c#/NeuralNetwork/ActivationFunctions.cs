@@ -10,7 +10,7 @@ namespace NeuralNetwork
                 for (int i = 0; i < output.row; i++)
                 {
                     for (int j = 0; j < output.column; j++)               
-                        output.matrix[i, j] = 1f / (1f + (float)Math.Exp(-output.matrix[i, j]));
+                        output.data[i, j] = 1f / (1f + (float)Math.Exp(-output.data[i, j]));
                 }
                 return output;
             }
@@ -20,7 +20,7 @@ namespace NeuralNetwork
                 for (int i = 0; i < output.row; i++)
                 {
                     for (int j = 0; j < output.column; j++)               
-                        output.matrix[i, j] = 2f / (1f + (float)Math.Exp(-2f*output.matrix[i, j]))-1;
+                        output.data[i, j] = 2f / (1f + (float)Math.Exp(-2f*output.data[i, j]))-1;
                 }
                 return output;
             }
@@ -31,7 +31,7 @@ namespace NeuralNetwork
                 {
                     for (int j = 0; j < output.column; j++)
                     { 
-                        output.matrix[i,j] = 1.0f / (1.0f + (float)Math.Exp(-output.matrix[i,j]));
+                        output.data[i,j] = 1.0f / (1.0f + (float)Math.Exp(-output.data[i,j]));
                     }
                 }
                 return output;
@@ -44,7 +44,7 @@ namespace NeuralNetwork
                 {
                     for (int j = 0; j < output.column; j++)
                     { 
-                        output.matrix[i,j] =  output.matrix[i,j] * (1.0f - output.matrix[i,j]);
+                        output.data[i,j] =  output.data[i,j] * (1.0f - output.data[i,j]);
                     }
                 }
                 return output;
@@ -56,7 +56,7 @@ namespace NeuralNetwork
                 {
                     for (int j = 0; j < output.column; j++)
                     { 
-                        output.matrix[i,j] = 1.0f - (output.matrix[i,j]  * output.matrix[i,j]);
+                        output.data[i,j] = 1.0f - (output.data[i,j]  * output.data[i,j]);
                     }
                 }
                 return output;
