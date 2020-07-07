@@ -57,5 +57,26 @@ namespace NeuralNetwork
                         }
                         
                 }
+                public static float error(Matrix output, Matrix target)
+                {
+                    float err = 0.0f;
+                    Matrix temp = new Matrix(output.row, output.column);
+                    for (int i = 0; i < temp.row; i++)
+                    {
+                        for (int j = 0; j < temp.column; j++)
+                            temp.data[i, j] = 0.5f * (float)(Math.Pow((double)(target.data[i, j] - output.data[i, j]), 2.0));
+                    }
+                    for (int i = 0; i < temp.row; i++)
+                    {
+                        err += temp.data[i, 0];
+                    }
+                    return err;
+                }
+                public static Matrix dError(Matrix output, Matrix target)
+                {
+                    Matrix temp = Matrix.subtract(output, target);
+                    return temp;
+                }
+
     }
 }

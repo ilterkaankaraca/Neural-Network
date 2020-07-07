@@ -64,28 +64,7 @@ namespace NeuralNetwork
                 this.biasesA[0] = new Matrix(nn.biasesA[0]);
                 this.biasesA[1] = new Matrix(nn.biasesA[1]);
             }
-            public static float error(Matrix output, Matrix target)
-            {
-                float err = 0.0f;
-                Matrix temp = new Matrix(output.row, output.column);
-                for (int i = 0; i < temp.row; i++)
-                {
-                    for (int j = 0; j < temp.column; j++)
-                        temp.data[i, j] = 0.5f * (float)(Math.Pow((double)(target.data[i, j] - output.data[i, j]), 2.0));
-                }
-                for (int i = 0; i < temp.row; i++)
-                {
-                    err += temp.data[i, 0];
-                }
-                return err;
-            }
-
-            public static Matrix dError(Matrix output, Matrix target)
-            {
-                Matrix temp = Matrix.subtract(output, target);
-                return temp;
-            }
-            public void FeedForward()
+            public void FeedForwardO()
             {
                 hidden = Matrix.mult(weightsA[0], input);//h
                 hidden = Matrix.add(hidden, biasesA[0]);//neth
@@ -94,10 +73,17 @@ namespace NeuralNetwork
                 output = Matrix.add(output, biasesA[1]);//neto
                 ActivationFunctions.Tanh(output);//outo  
             }
+            public void FeedForward()
+            {
+                for(int i=1;i<layers.Count;i++)
+                {
+                    layers[i].FeedForward(input);
+                }
+            }
             public void backProp()
             {
                 //output layer
-                Matrix out_d_error_L2 = dError(output, target);
+                Matrix out_d_error_L2 = Layer.dError(output, target);
                 Matrix net_d_out_L2 = ActivationFunctions.DerTanh(output);
                 Matrix net_d_error_L2 = Matrix.eWMult(out_d_error_L2, net_d_out_L2);
                 Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(hidden));
@@ -121,7 +107,6 @@ namespace NeuralNetwork
             }
             public void Initialize()
             {
-                //eğer girişse inputN ve 1, hiddensa kendisi ve sonraki, çıkışsa outputN ve 1
                 for(int i=1;i<layers.Count-1;i++)
                 {
                     layers[i].Initialize(layers[i+1].neuronN);
