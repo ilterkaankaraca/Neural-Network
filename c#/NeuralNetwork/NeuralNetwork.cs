@@ -77,7 +77,7 @@ namespace NeuralNetwork
             {
                 for(int i=1;i<layers.Count;i++)
                 {
-                    input=layers[i].FeedForward(input);
+                    tempInput=layers[i].FeedForward(input);
                 }
             }
             public void backProp()
