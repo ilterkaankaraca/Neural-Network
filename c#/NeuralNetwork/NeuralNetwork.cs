@@ -19,7 +19,7 @@ namespace NeuralNetwork
             public Matrix input;
             public Matrix output;
             public Matrix target;
-            public Matrix hidden;
+            public Matrix tempInput;
             public Matrix[] weightsA = new Matrix[2];
             public Matrix[] biasesA = new Matrix[2];
             public NeuralNetwork()
@@ -35,7 +35,7 @@ namespace NeuralNetwork
                 this.learningRate = learningRate;
 
                 this.input = new Matrix(inputN, 1);
-                this.hidden = new Matrix(hiddenN, 1);
+                this.tempInput = new Matrix(hiddenN, 1);
                 this.output = new Matrix(outputN, 1);
 
                 this.weightsA[0] = new Matrix(hiddenN, inputN); 
@@ -57,7 +57,7 @@ namespace NeuralNetwork
                 this.learningRate = nn.learningRate;
 
                 this.input  = nn.input; 
-                this.hidden = nn.hidden;
+                this.tempInput = nn.tempInput;
                 this.output = nn.output;
                 this.weightsA[0] = new Matrix(nn.weightsA[0]);
                 this.weightsA[1] = new Matrix(nn.weightsA[1]);
@@ -66,18 +66,18 @@ namespace NeuralNetwork
             }
             public void FeedForwardO()
             {
-                hidden = Matrix.mult(weightsA[0], input);//h
-                hidden = Matrix.add(hidden, biasesA[0]);//neth
-                ActivationFunctions.Tanh(hidden);//outh
-                output = Matrix.mult(weightsA[1], hidden);//o
+                tempInput = Matrix.mult(weightsA[0], input);//h
+                tempInput = Matrix.add(tempInput, biasesA[0]);//neth
+                ActivationFunctions.Tanh(tempInput);//outh
+                output = Matrix.mult(weightsA[1], tempInput);//o
                 output = Matrix.add(output, biasesA[1]);//neto
                 ActivationFunctions.Tanh(output);//outo  
             }
-            public void FeedForward()
+            public void FeedForward(Matrix input)
             {
                 for(int i=1;i<layers.Count;i++)
                 {
-                    layers[i].FeedForward(input);
+                    input=layers[i].FeedForward(input);
                 }
             }
             public void backProp()
@@ -86,12 +86,12 @@ namespace NeuralNetwork
                 Matrix out_d_error_L2 = Layer.dError(output, target);
                 Matrix net_d_out_L2 = ActivationFunctions.DerTanh(output);
                 Matrix net_d_error_L2 = Matrix.eWMult(out_d_error_L2, net_d_out_L2);
-                Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(hidden));
+                Matrix w_d_error_L2 = Matrix.mult(net_d_error_L2, Matrix.transpose(tempInput));
                 Matrix out_d_error_L1 = Matrix.mult(Matrix.transpose(weightsA[1]), net_d_error_L2);
                 weightsA[1] = Matrix.subtract(weightsA[1], Matrix.scalarMult(w_d_error_L2, learningRate));
 
                 //hidden layer
-                Matrix net_d_out_L1 = ActivationFunctions.DerTanh(hidden);
+                Matrix net_d_out_L1 = ActivationFunctions.DerTanh(tempInput);
                 Matrix net_d_error_L1 = Matrix.eWMult(out_d_error_L1, net_d_out_L1);
                 Matrix w_d_error_L1 = Matrix.mult(net_d_error_L1, Matrix.transpose(input));
                 weightsA[0] = Matrix.subtract(weightsA[0], Matrix.scalarMult(w_d_error_L1, learningRate));
