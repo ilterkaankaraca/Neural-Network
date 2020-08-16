@@ -57,7 +57,8 @@ namespace NeuralNetwork
                         }
                         
                 }
-                public static float error(Matrix output, Matrix target)
+                //TODO: Bunun için Matt Mazura bakman lazım 
+                public float error(Matrix output, Matrix target)
                 {
                     float err = 0.0f;
                     Matrix temp = new Matrix(output.row, output.column);
@@ -72,11 +73,14 @@ namespace NeuralNetwork
                     }
                     return err;
                 }
-                public static Matrix dError(Matrix output, Matrix target)
+                public Matrix dError(Matrix output, Matrix target)
                 {
                     Matrix temp = Matrix.subtract(output, target);
                     return temp;
                 }
-
+                public Matrix FeedForward(Matrix input)
+                {
+                        //Buraya eski feedforwarddaki şeyler gelecek
+                }
     }
 }
