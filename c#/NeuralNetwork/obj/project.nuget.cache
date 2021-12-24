@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tMiBJv0MBmt/8pbdPD7Vd64knd4dsELO3pfeDI9lAaUW4vx9AIESV6ASDpewUg/gOmv0PlY1VPbbVoLl28QssA==",
+  "dgSpecHash": "sKcehZghH8cEIBZxEIoH6Kb881Q5BrqsJdyZtGqgru7++BTw4mwQAFn9iPDMmeYlVx331af6lphKij/gKcl5xw==",
   "success": true,
-  "projectFilePath": "E:\\Repos\\neural-network-example\\c#\\NeuralNetwork\\NeuralNetwork.csproj",
+  "projectFilePath": "C:\\Users\\Ilterkaan\\Documents\\GitHub\\neural-network\\c#\\NeuralNetwork\\NeuralNetwork.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

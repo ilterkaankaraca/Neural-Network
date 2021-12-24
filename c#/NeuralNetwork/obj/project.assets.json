@@ -8,19 +8,19 @@
     ".NETCoreApp,Version=v3.1": []
   },
   "packageFolders": {
-    "C:\\Users\\Ilterkaan Karaca\\.nuget\\packages\\": {}
+    "C:\\Users\\Ilterkaan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Repos\\neural-network-example\\c#\\NeuralNetwork\\NeuralNetwork.csproj",
+      "projectUniqueName": "C:\\Users\\Ilterkaan\\Documents\\GitHub\\neural-network\\c#\\NeuralNetwork\\NeuralNetwork.csproj",
       "projectName": "NeuralNetwork",
-      "projectPath": "E:\\Repos\\neural-network-example\\c#\\NeuralNetwork\\NeuralNetwork.csproj",
-      "packagesPath": "C:\\Users\\Ilterkaan Karaca\\.nuget\\packages\\",
-      "outputPath": "E:\\Repos\\neural-network-example\\c#\\NeuralNetwork\\obj\\",
+      "projectPath": "C:\\Users\\Ilterkaan\\Documents\\GitHub\\neural-network\\c#\\NeuralNetwork\\NeuralNetwork.csproj",
+      "packagesPath": "C:\\Users\\Ilterkaan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ilterkaan\\Documents\\GitHub\\neural-network\\c#\\NeuralNetwork\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Ilterkaan Karaca\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ilterkaan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,7 +28,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.1": {
@@ -58,7 +58,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
       }
     }
   }

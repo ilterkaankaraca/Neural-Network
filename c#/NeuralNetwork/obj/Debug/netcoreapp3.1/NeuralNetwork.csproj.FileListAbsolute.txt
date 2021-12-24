@@ -11,3 +11,16 @@ E:\Repos\neural-network-example\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralN
 E:\Repos\neural-network-example\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.dll
 E:\Repos\neural-network-example\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.pdb
 E:\Repos\neural-network-example\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.genruntimeconfig.cache
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.csprojAssemblyReference.cache
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.AssemblyInfoInputs.cache
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.AssemblyInfo.cs
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.csproj.CoreCompileInputs.cache
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.dll
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.pdb
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralNetwork.exe
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralNetwork.deps.json
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralNetwork.runtimeconfig.json
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralNetwork.runtimeconfig.dev.json
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralNetwork.dll
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\bin\Debug\netcoreapp3.1\NeuralNetwork.pdb
+C:\Users\Ilterkaan\Documents\GitHub\neural-network\c#\NeuralNetwork\obj\Debug\netcoreapp3.1\NeuralNetwork.genruntimeconfig.cache
